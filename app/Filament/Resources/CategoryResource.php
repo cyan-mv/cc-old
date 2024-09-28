@@ -16,6 +16,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
+use Illuminate\Support\Str; // Add this import for the Str helper
 
 class CategoryResource extends Resource
 {
@@ -24,18 +25,24 @@ class CategoryResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
-{
-    return $form
-        ->schema([
-            TextInput::make('name')
-                ->required()
-                ->autofocus()
-                ->rules('unique:categories,name'), // Apply uniqueness at validation level
-            TextInput::make('slug')->required(),
-            Toggle::make('is_active')->default(false),
-        ]);
-}
+    {
+        return $form
+            ->schema([
+                TextInput::make('name')
+                    ->required()
+                    ->unique()
+//                    ->live(onBlur: true)
+                    ->lazy()
+                    ->autofocus()
+                    ->afterStateUpdated(function ($set, ?string $state) {
+                        // Ensure correct usage of 'Str::slug' helper
+                        $set('slug', str()->slug($state));
+                    }),
 
+                TextInput::make('slug')->required(),
+                Toggle::make('is_active')->default(false),
+            ]);
+    }
 
     public static function table(Table $table): Table
     {
@@ -44,7 +51,6 @@ class CategoryResource extends Resource
                 TextColumn::make('name')->searchable()->sortable(),
                 TextColumn::make('slug'),
                 ToggleColumn::make('is_active')->label('status')
-                //
             ])
             ->filters([
                 //
