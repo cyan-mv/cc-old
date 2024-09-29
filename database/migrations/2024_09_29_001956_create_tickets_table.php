@@ -13,10 +13,16 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('assigned_to')->constrained('users');
+            $table->foreignId('assigned_by')->constrained('users');
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->string('status');
+            $table->string('priority');
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
