@@ -41,4 +41,8 @@ class Ticket extends Model
         return $this->belongsTo(User::class, 'assigned_by');
     }
 
+    public function categories() {
+        return $this->belongsToMany(Category::class);
+    }
+
 }

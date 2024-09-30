@@ -92,6 +92,7 @@ class TicketResource extends Resource
     {
         return [
             //
+            RelationManagers\CategoriesRelationManager::class
         ];
     }
 
