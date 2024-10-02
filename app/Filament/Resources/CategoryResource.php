@@ -50,7 +50,7 @@ class CategoryResource extends Resource
             ->columns([
                 TextColumn::make('name')->searchable()->sortable(),
                 TextColumn::make('slug'),
-                ToggleColumn::make('is_active')->label('status')
+                ToggleColumn::make('is_active')->label('status')->disabled(auth()->user()->haspermission('category_edit'))
             ])
             ->filters([
                 //
