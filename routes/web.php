@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Permission;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +17,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    dd(User::find(1)->hasPermission('category_create'));
-    return view('welcome');
+//    return view('welcome');
+
+    $admin_permissions = Permission::all();
+    $agent_permissions = Permission::where('name', 'like', 'permission_%')->get();
+
+    Role::findOrFail(1)->permissions()->sync($admin_permissions);
+    Role::findOrFail(2)->permissions()->sync($agent_permissions);
+    dd(User::find(2)->hasPermissionTo('permission_access'));
+
 });
