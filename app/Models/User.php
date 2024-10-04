@@ -66,24 +66,6 @@ class User extends Authenticatable
 //        dd($permissionsArray);
     }
 
-    public function hasPermissionTo(string $permission)
-    {
-        $permissionsArray = [];
 
-        // Loop through each role assigned to the user
-        foreach ($this->roles as $role) {
-            // For each role, loop through the permissions associated with that role
-            foreach ($role->permissions as $singlePermission) {
-                // Store the permission names in an array
-                $permissionsArray[] = $singlePermission->name;
-            }
-        }
-
-        // Convert the array to a collection, remove duplicates, and check if it contains the desired permission
-//        return collect($permissionsArray)->unique()->contains($permission);
-//        return $permissionsArray;
-        return collect($permissionsArray)->unique()->contains($permission);
-//        dd($permissionsArray);
-    }
 
 }
